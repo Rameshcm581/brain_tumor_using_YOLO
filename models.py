@@ -29,6 +29,7 @@ class MedicalImage(Base):
     __tablename__ = "medical_images"
     id = Column(Integer, primary_key=True)
     patient_id = Column(Integer, ForeignKey("patients.id"))
-    image_path = Column(String(200))
+    image_path = Column(String(500))  # Original image URL
+    processed_image_path = Column(String(500))  # Processed image URL
     upload_date = Column(DateTime, default=datetime.now)
     analysis_result = Column(String(200))
