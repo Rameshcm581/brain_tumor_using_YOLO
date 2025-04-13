@@ -188,28 +188,47 @@ async def analyze_image(
         start_time = time.time()
         patient_id = request.session["current_patient_id"]
 
-        # Upload to Cloudinary instead of local storage
-        upload_result = cloudinary.uploader.upload(
-            await image.read(),
-            folder="medical_images",
+        # 1. Save uploaded file temporarily
+        temp_dir = "temp"
+        os.makedirs(temp_dir, exist_ok=True)
+        temp_path = os.path.join(temp_dir, image.filename)
+        
+        with open(temp_path, "wb") as buffer:
+            content = await image.read()
+            buffer.write(content)
+
+        # 2. Process with YOLO using local file
+        results = model(temp_path)
+        
+        # 3. Save processed image temporarily
+        processed_filename = f"processed_{image.filename}"
+        processed_path = os.path.join(temp_dir, processed_filename)
+        results[0].save(processed_path)
+
+        # 4. Upload both images to Cloudinary
+        original_upload = cloudinary.uploader.upload(
+            temp_path,
+            folder="medical_images/original",
+            public_id=f"patient_{patient_id}_{int(time.time())}",
+            resource_type="image"
+        )
+        
+        processed_upload = cloudinary.uploader.upload(
+            processed_path,
+            folder="medical_images/processed",
             public_id=f"patient_{patient_id}_{int(time.time())}",
             resource_type="image"
         )
 
-        # Get Cloudinary URL
-        image_url, options = cloudinary_url(
-            upload_result['public_id'],
-            format="jpg",
-            crop="fill"
-        )
+        # 5. Clean up temp files
+        os.remove(temp_path)
+        os.remove(processed_path)
 
-        # Process with YOLO model using Cloudinary URL
-        results = model(image_url)
-        
-        # Save analysis results to database
+        # 6. Store results in database
         new_image = models.MedicalImage(
             patient_id=patient_id,
-            image_path=image_url,  # Store Cloudinary URL
+            image_path=original_upload['secure_url'],
+            processed_image_path=processed_upload['secure_url'],
             analysis_result=", ".join([model.names[int(cls)] for cls in results[0].boxes.cls]) if results[0].boxes.cls else None
         )
         db.add(new_image)
@@ -219,7 +238,7 @@ async def analyze_image(
         
         return templates.TemplateResponse("result.html", {
             "request": request,
-            "image_path": image_url,
+            "image_path": processed_upload['secure_url'],
             "analysis_date": datetime.now(),
             "processing_time": processing_time,
             "diagnosis_result": new_image.analysis_result
@@ -228,8 +247,6 @@ async def analyze_image(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-
-
 @app.get("/logout")
 async def logout(request: Request):
     request.session.clear()
