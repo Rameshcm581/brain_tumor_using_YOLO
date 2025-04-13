@@ -1,0 +1,157 @@
+:root {
+    --hospital-blue: #0053a6;
+    --hospital-teal: #00a8b5;
+    --hospital-light: #e8f4f8;
+    --hospital-dark: #003366;
+    --hospital-red: #c62828;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.navbar {
+    background: linear-gradient(135deg, var(--hospital-dark), var(--hospital-blue)) !important;
+    box-shadow: 0 2px 15px rgba(0, 53, 166, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--hospital-blue), var(--hospital-teal)) !important;
+    border-radius: 0 !important;
+    padding: 1.5rem;
+    border-bottom: none !important;
+}
+
+.medical-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.btn-hospital-primary {
+    background-color: var(--hospital-blue);
+    border-color: var(--hospital-blue);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-hospital-primary:hover {
+    background-color: var(--hospital-dark);
+    border-color: var(--hospital-dark);
+    transform: translateY(-2px);
+}
+
+.form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px 15px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--hospital-teal);
+    box-shadow: 0 0 0 0.2rem rgba(0, 168, 181, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--hospital-dark) !important;
+}
+
+.medical-file-input {
+    border: 2px dashed var(--hospital-teal);
+    background-color: var(--hospital-light);
+    padding: 2rem;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.result-image {
+    border: 3px solid var(--hospital-teal);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 168, 181, 0.2);
+    max-height: 70vh;
+}
+
+.analysis-badge {
+    background: rgba(0, 83, 166, 0.9);
+    font-size: 0.95em;
+    padding: 8px 25px;
+    border-radius: 20px;
+}
+
+.text-hospital-link {
+    color: var(--hospital-blue);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.text-hospital-link:hover {
+    text-decoration: underline;
+}
+
+.bi {
+    font-size: 1.3em;
+    vertical-align: text-bottom;
+    margin-right: 0.3em;
+}
+
+.alert-hospital {
+    background-color: var(--hospital-light);
+    border-color: var(--hospital-teal);
+    color: var(--hospital-dark);
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%230053a6' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.alert-hospital {
+    background-color: #ffe6e6;
+    border-color: var(--hospital-red);
+    color: var(--hospital-red);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.alert-hospital .bi {
+    color: var(--hospital-red);
+}
+
+.text-hospital-link {
+    color: var(--hospital-blue);
+    transition: color 0.3s ease;
+}
+
+.text-hospital-link:hover {
+    color: var(--hospital-dark);
+    text-decoration: underline;
+}
+
+.form-control[autocomplete="username"] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230053a6' width='24px' height='24px'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 20px;
+}
+
+.form-control[autocomplete="current-password"] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230053a6' width='24px' height='24px'%3E%3Cpath d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 20px;
+}

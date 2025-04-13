@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="medical-card mx-auto" style="max-width: 500px;">
+    <div class="card-header text-white bg-hospital-blue">
+        <h5 class="mb-0"><i class="bi bi-clipboard2-pulse me-2"></i>Medical Staff Registration</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label text-secondary"><i class="bi bi-person-badge me-2"></i>Username</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary"><i class="bi bi-envelope me-2"></i>Email</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-secondary"><i class="bi bi-shield-lock me-2"></i>Password</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-hospital-primary w-100">
+                <i class="bi bi-file-medical me-2"></i>Register
+            </button>
+        </form>
+        <div class="mt-3 text-center text-secondary">
+            <small>Already registered? <a href="/login" class="text-hospital-link">Clinical Login</a></small>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="medical-card mx-auto" style="max-width: 400px;">
+    <div class="card-header text-white bg-hospital-blue">
+        <h5 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Medical Portal Login</h5>
+    </div>
+    <div class="card-body">
+        {% if error %}
+        <div class="alert alert-hospital mb-4">
+            <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label text-secondary">
+                    <i class="bi bi-person-badge me-2"></i>Username or Email
+                </label>
+                <input type="text" 
+                       class="form-control" 
+                       name="username_email" 
+                       required
+                       autocomplete="username">
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label text-secondary">
+                    <i class="bi bi-key me-2"></i>Password
+                </label>
+                <input type="password" 
+                       class="form-control" 
+                       name="password" 
+                       required
+                       autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="btn btn-hospital-primary w-100">
+                <i class="bi bi-door-open me-2"></i>Access Portal
+            </button>
+        </form>
+
+        <div class="mt-4 text-center">
+            <a href="/register" class="text-hospital-link">
+                <i class="bi bi-person-plus me-2"></i>New User Registration
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

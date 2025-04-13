@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="medical-card mx-auto" style="max-width: 1000px;">
+    <div class="card-header text-white">
+        <h5 class="mb-0"><i class="bi bi-clipboard2-pulse me-2"></i>Clinical Analysis Report</h5>
+    </div>
+    <div class="card-body">
+        <div class="patient-info mb-4">
+            <div class="alert alert-hospital">
+                <i class="bi bi-person-badge me-2"></i>
+                Patient ID: {{ request.session.current_patient_id }}
+            </div>
+        </div>
+        <div class="analysis-meta mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-primary">
+                        <i class="bi bi-calendar me-2"></i>Analysis Date: {{ analysis_date.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-primary">
+                        <i class="bi bi-clock-history me-2"></i>Processing Time: {{ processing_time }} seconds
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="imaging-results">
+            <div class="text-center mb-4">
+                <h5 class="text-primary mb-3">Medical Imaging Analysis</h5>
+                <div class="image-container position-relative">
+                    <img src="{{ image_path }}" 
+                         class="result-image shadow" 
+                         alt="Clinical Imaging Analysis">
+                </div>
+            </div>
+        </div>
+
+        <div class="clinical-notes mt-4">
+            <div class="card border-primary">
+                <div class="card-header bg-transparent border-primary">
+                    <i class="bi bi-journal-medical me-2"></i>Diagnostic Results
+                </div>
+                <div class="card-body">
+                    {% if diagnosis_result %}
+                        <div class="alert alert-hospital alert-dismissible fade show" role="alert">
+                            <i class="bi bi-clipboard2-check me-2"></i>
+                            <strong>Detection Result:</strong> {{ diagnosis_result }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle me-2"></i>
+                            No tumor detected in the imaging analysis
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <a href="/patient" class="btn btn-hospital-primary">
+                <i class="bi bi-file-earmark-plus me-2"></i>New Analysis
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

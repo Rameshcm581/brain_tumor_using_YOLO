@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="medical-card mx-auto" style="max-width: 800px;">
+    <div class="card-header text-white">
+        <h5 class="mb-0"><i class="bi bi-cloud-upload me-2"></i>Medical Imaging Upload</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-primary">
+            <i class="bi bi-info-circle me-2"></i>Supported formats: JPEG, PNG, DICOM
+        </div>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label class="form-label text-secondary">Select Medical Image</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" 
+                           class="form-control medical-file-input" 
+                           name="image" 
+                           accept="image/*,.dcm"
+                           required>
+                    <div class="upload-instructions text-muted mt-2">
+                        <small>Max file size: 5MB | Optimal resolution: 1024x1024</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-microscope me-2"></i>Analyze Imaging
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
