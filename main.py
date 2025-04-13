@@ -12,6 +12,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ultralytics import YOLO
 from contextlib import asynccontextmanager
 import models
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
+
+# Configure Cloudinary (add to your app startup)
+cloudinary.config(
+    cloud_name='dlrhlfds6',
+    api_key='475288642736875',
+    api_secret='xlRh-aNsFoAtWwxLxZJghIU_wRA'
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -164,6 +174,7 @@ async def upload_page(request: Request):
         return RedirectResponse("/login", status_code=303)
     return templates.TemplateResponse("upload.html", {"request": request})
 
+
 @app.post("/upload", response_class=HTMLResponse)
 async def analyze_image(
     request: Request,
@@ -174,39 +185,41 @@ async def analyze_image(
         return RedirectResponse("/login", status_code=303)
     
     try:
-        # Get patient ID from session
-        patient_id = request.session["current_patient_id"]
-        
         start_time = time.time()
+        patient_id = request.session["current_patient_id"]
+
+        # Upload to Cloudinary instead of local storage
+        upload_result = cloudinary.uploader.upload(
+            await image.read(),
+            folder="medical_images",
+            public_id=f"patient_{patient_id}_{int(time.time())}",
+            resource_type="image"
+        )
+
+        # Get Cloudinary URL
+        image_url, options = cloudinary_url(
+            upload_result['public_id'],
+            format="jpg",
+            crop="fill"
+        )
+
+        # Process with YOLO model using Cloudinary URL
+        results = model(image_url)
         
-        # Save file
-        filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-        save_path = os.path.join("static/uploads", filename)
-        
-        with open(save_path, "wb") as buffer:
-            content = await image.read()
-            buffer.write(content)
-        
-        # Process image
-        results = model(save_path)
-        output_path = os.path.join("static/uploads", f"pred_{filename}")
-        results[0].save(output_path)
-        
-        # Save to database
+        # Save analysis results to database
         new_image = models.MedicalImage(
             patient_id=patient_id,
-            image_path=output_path,
+            image_path=image_url,  # Store Cloudinary URL
             analysis_result=", ".join([model.names[int(cls)] for cls in results[0].boxes.cls]) if results[0].boxes.cls else None
         )
         db.add(new_image)
         db.commit()
-        
-        # Prepare results
+
         processing_time = round(time.time() - start_time, 2)
         
         return templates.TemplateResponse("result.html", {
             "request": request,
-            "image_path": output_path,
+            "image_path": image_url,
             "analysis_date": datetime.now(),
             "processing_time": processing_time,
             "diagnosis_result": new_image.analysis_result
@@ -215,6 +228,7 @@ async def analyze_image(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/logout")
 async def logout(request: Request):
